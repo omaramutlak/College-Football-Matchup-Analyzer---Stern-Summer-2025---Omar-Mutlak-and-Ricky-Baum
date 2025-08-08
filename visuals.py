@@ -2,7 +2,6 @@ import plotly.graph_objects as go
 from utils import extract_stat
 
 def plot_team_comparison(team1, team2, stats1, stats2):
-    # Extract key stats
     team1_off_yards = extract_stat(stats1, "totalYards")
     team2_off_yards = extract_stat(stats2, "totalYards")
 
@@ -36,29 +35,25 @@ def plot_team_comparison(team1, team2, stats1, stats2):
 
     fig.show()
 
-
 def plot_game_prediction(team1, team2, score1, score2, prob1, prob2):
-    """Visualize predicted scores and win probabilities for a matchup."""
-    fig = go.Figure()
-    fig.add_trace(
-        go.Bar(
-            x=[team1, team2],
-            y=[score1, score2],
-            text=[f"{prob1}% win", f"{prob2}% win"],
-            textposition="auto",
-            name="Predicted Score",
+    """Visualize win probabilities for a matchup using a pie chart."""
+    fig = go.Figure(data=[
+        go.Pie(
+            labels=[team1, team2],
+            values=[prob1, prob2],
+            hoverinfo='label+percent',
+            textinfo='label+percent',
+            marker=dict(line=dict(color='#000000', width=2))
         )
-    )
+    ])
+
     fig.update_layout(
-        title=f"{team1} vs {team2} - Score Prediction",
-        xaxis_title="Team",
-        yaxis_title="Predicted Score",
+        title=f"{team1} vs {team2} - Predicted Score: {score1} to {score2}",
     )
+
     fig.show()
 
-
 def plot_predicted_yardage(team1, team2, off1, def1, off2, def2):
-    """Visualize predicted offensive yards and defensive yards allowed."""
     categories = [team1, team2]
     fig = go.Figure()
     fig.add_trace(
@@ -99,12 +94,7 @@ def plot_player_comparison(player_stats, stat_type="passingYards", top_n=5):
     )
     fig.show()
 
-
-
-
-
 def plot_team_roster(team, roster):
-    """Display a team's roster as an interactive table."""
     if not roster:
         print("No roster data available.")
         return
@@ -120,3 +110,4 @@ def plot_team_roster(team, roster):
     fig = go.Figure(data=[table])
     fig.update_layout(title=f"{team} Roster")
     fig.show()
+
